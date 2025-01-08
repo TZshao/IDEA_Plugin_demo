@@ -1,40 +1,59 @@
 package com.example.demopl;
 
+import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.SelectionModel;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
-import com.intellij.openapi.project.Project;
+import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
 
-public class HelloWorld extends AnAction {
+import java.io.FileNotFoundException;
+import java.io.RandomAccessFile;
+
+public class FileSelector extends AnAction {
 
     public static String selectedFilePath;
-    public static int startLine = 0;
+    public static RandomAccessFile file;
 
     @Override
     public void actionPerformed(AnActionEvent e) {
         // 打开文件选择器
-        FileChooserDescriptor fileChooserDescriptor = new FileChooserDescriptor(true, false, false, false, false, false);
-        VirtualFile file = FileChooser.chooseFile(fileChooserDescriptor, e.getProject(), null);
-
-        if (file != null) {
-            selectedFilePath = file.getPath();
-            // 提示用户输入起始行号
-            String inputLine = Messages.showInputDialog("Enter the starting line number:", "Input Start Line", Messages.getQuestionIcon());
-            try {
-                if (inputLine != null) {
-                    startLine = Integer.parseInt(inputLine);
-                    Messages.showInfoMessage("File selected: " + selectedFilePath + "\nStart line: " + startLine, "Selection Complete");
-                }
-            } catch (NumberFormatException ex) {
-                Messages.showErrorDialog("Invalid line number!", "Error");
+        FileChooserDescriptor fileChooserDescriptor = FileChooserDescriptorFactory.createSingleFileNoJarsDescriptor();
+        fileChooserDescriptor.withFileFilter(file -> file.getName().endsWith(".txt"));
+        VirtualFile vFile = FileChooser.chooseFile(fileChooserDescriptor, e.getProject(), null);
+        try {
+            selectedFilePath = vFile.getPath();
+            PropertiesComponent properties = PropertiesComponent.getInstance();
+            properties.setValue("reader_selectedFilePath", selectedFilePath);
+            if (vFile != null) {
+                file = new RandomAccessFile(selectedFilePath, "r");
+                Messages.showInfoMessage("File selected: " + selectedFilePath, "Selection Complete");
             }
+        } catch (FileNotFoundException ex) {
         }
     }
+
+    public static RandomAccessFile getFile() {
+        if (file == null) {
+            PropertiesComponent instance = PropertiesComponent.getInstance();
+            if (instance.getValue("reader_selectedFilePath") != null) {
+                initFile(instance.getValue("reader_selectedFilePath"));
+            }
+        }
+        return file;
+    }
+
+    public static boolean initFile(String filePath) {
+        try {
+            file = new RandomAccessFile(filePath, "r");
+            selectedFilePath = filePath;
+            return true;
+        } catch (Throwable e) {
+            return false;
+        }
+    }
+
 }

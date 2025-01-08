@@ -2,6 +2,7 @@ plugins {
     id("java")
     id("org.jetbrains.kotlin.jvm") version "1.9.25"
     id("org.jetbrains.intellij") version "1.17.4"
+//    id("org.jetbrains.intellij.platform") version "2.2.0"
 }
 
 group = "com.example"
@@ -9,6 +10,9 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+//    maven {
+//        url = uri("https://maven.aliyun.com/repository/public")
+//    }
 }
 
 // Configure Gradle IntelliJ Plugin
@@ -16,7 +20,7 @@ repositories {
 intellij {
     version.set("2023.2.6")
     type.set("IC") // Target IDE Platform
-
+//    localPath.set("C:\\Program Files\\JetBrains\\IntelliJ IDEA 2024.2.1")
     plugins.set(listOf(/* Plugin Dependencies */))
 }
 

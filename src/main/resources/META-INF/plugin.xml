@@ -8,15 +8,14 @@
     <name>DemoPL</name>
 
     <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
-    <vendor email="support@yourcompany.com" url="https://www.yourcompany.com">YourCompany</vendor>
+    <vendor email="my@yourcompany.com" url="https://www.yourcompany.com">myCompany</vendor>
 
     <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
-    <description><![CDATA[
-    Enter short description for your plugin here.<br>
-    <em>most HTML tags may be used</em>
-  ]]></description>
+    <description>
+        DemoPL test-----------------------------
+    </description>
 
     <!-- Product and plugin compatibility requirements.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
@@ -25,6 +24,31 @@
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-
     </extensions>
+
+    <actions>
+        <!-- 定义一级菜单 -->
+        <group id="MyToolsGroup" text="Reader" popup="true">
+            <!-- 将一级菜单添加到 Tools 菜单 -->
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+            <!-- 定义二级菜单 -->
+            <action id="Choose" text="Choose" class="com.example.demopl.FileSelector"/>
+            <action id="input" text="Input" class="com.example.demopl.ShowDialog"/>
+<!--            <group id="SubMenuGroup" text="Sub Menu" popup="true">-->
+                <!-- 定义二级菜单的操作 -->
+<!--            </group>-->
+
+        </group>
+
+        <!-- 快捷键 -->
+        <action id="KeyPreRead" class="com.example.demopl.KeyPreRead" text="KeyPreRead" description="KeyPreRead">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt UP"/>
+        </action>
+        <action id="KeyNextRead" class="com.example.demopl.KeyNextRead" text="KeyNextRead" description="KeyNextRead">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt DOWN"/>
+        </action>
+    </actions>
+
+
+
 </idea-plugin>

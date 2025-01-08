@@ -9,14 +9,17 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import org.jsoup.internal.StringUtil;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class KeyNextRead extends AnAction {
+public class KeyPreRead extends AnAction {
 
+
+    private BufferedReader reader;
     private int currentLine = 0;
 
     @Override
@@ -42,9 +45,11 @@ public class KeyNextRead extends AnAction {
             // 跳转到起始行号
             StringBuilder text = new StringBuilder();
             currentLine = instance.getInt("reader_currentLine",1);
-            System.out.println(currentLine+1);
-            Util.locateLineNext(file, currentLine);
-
+            System.out.println(currentLine-1);
+            if (currentLine <= 1) {
+                return;
+            }
+            Util.locateLinePre(file, currentLine);
             int onceLineNum = Config.onceLineNum == -1 ? instance.getInt("reader_onceLineNum", 3) : Config.onceLineNum;
             boolean isFirst = true;
             for (int i = 0; i < onceLineNum; i++) {
@@ -54,8 +59,9 @@ public class KeyNextRead extends AnAction {
                     Config.currentPos = file.getFilePointer();
                 }
                 text.append(lineText).append("\n");
+
             }
-            instance.setValue("reader_currentLine", ++currentLine, 1);
+            instance.setValue("reader_currentLine", --currentLine, 1);
             replace(editor,e.getProject(),text.toString());
             System.out.println(text);
         } catch (IOException ex) {

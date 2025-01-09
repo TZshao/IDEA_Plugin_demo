@@ -12,8 +12,6 @@ import org.jsoup.internal.StringUtil;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class KeyNextRead extends AnAction {
 
@@ -38,14 +36,17 @@ public class KeyNextRead extends AnAction {
             }
             file = FileSelector.getFile();
         }
+        if (!Util.replace(editor, e.getProject(), null, true)) {
+            return;
+        }
+
         try {
             // 跳转到起始行号
             StringBuilder text = new StringBuilder();
-            currentLine = instance.getInt("reader_currentLine",1);
-            System.out.println(currentLine+1);
+            currentLine = instance.getInt("reader_currentLine", 1);
             Util.locateLineNext(file, currentLine);
 
-            int onceLineNum = Config.onceLineNum == -1 ? instance.getInt("reader_onceLineNum", 3) : Config.onceLineNum;
+            int onceLineNum = instance.getInt("reader_onceLineNum", 3);
             boolean isFirst = true;
             for (int i = 0; i < onceLineNum; i++) {
                 String lineText = new String(FileSelector.file.readLine().getBytes(StandardCharsets.ISO_8859_1));
@@ -56,37 +57,14 @@ public class KeyNextRead extends AnAction {
                 text.append(lineText).append("\n");
             }
             instance.setValue("reader_currentLine", ++currentLine, 1);
-            replace(editor,e.getProject(),text.toString());
-            System.out.println(text);
+            Util.replace(editor,e.getProject(),text.toString(),false);
+
         } catch (IOException ex) {
             Messages.showErrorDialog("Failed to read the file: " + ex.getMessage(), "Error");
         }
-//
     }
 
 
 
-    public void replace(Editor editor, Project project,String content) {
-        Document document = editor.getDocument();
-        CharSequence text = document.getCharsSequence();
-        String startMarker = "@author";
-        String endMarker = "@return";
 
-        // 使用正则表达式查找标识符之间的内容
-        String regex = Pattern.quote(startMarker) + "(.*?)" + Pattern.quote(endMarker);
-        Pattern pattern = Pattern.compile(regex, Pattern.DOTALL);
-        Matcher matcher = pattern.matcher(text);
-
-        if (matcher.find()) {
-            int replaceStart = matcher.start(1); // 获取内容开始位置
-            int replaceEnd = matcher.end(1);     // 获取内容结束位置
-
-            // 替换内容
-            com.intellij.openapi.command.WriteCommandAction.runWriteCommandAction(project, () -> {
-                document.replaceString(replaceStart, replaceEnd, "\n"+content);
-            });
-        } else {
-            Messages.showMessageDialog("Markers not found!", "Error", Messages.getErrorIcon());
-        }
-    }
 }

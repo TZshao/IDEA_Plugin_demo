@@ -3,7 +3,6 @@ package com.example.demopl;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
@@ -24,15 +23,15 @@ public class FileSelector extends AnAction {
         FileChooserDescriptor fileChooserDescriptor = FileChooserDescriptorFactory.createSingleFileNoJarsDescriptor();
         fileChooserDescriptor.withFileFilter(file -> file.getName().endsWith(".txt"));
         VirtualFile vFile = FileChooser.chooseFile(fileChooserDescriptor, e.getProject(), null);
+        if (vFile == null) return;
         try {
             selectedFilePath = vFile.getPath();
             PropertiesComponent properties = PropertiesComponent.getInstance();
             properties.setValue("reader_selectedFilePath", selectedFilePath);
-            if (vFile != null) {
-                file = new RandomAccessFile(selectedFilePath, "r");
-                Messages.showInfoMessage("File selected: " + selectedFilePath, "Selection Complete");
-            }
+            file = new RandomAccessFile(selectedFilePath, "r");
+            Messages.showInfoMessage("File selected: " + selectedFilePath, "Selection Complete");
         } catch (FileNotFoundException ex) {
+            Messages.showErrorDialog(ex.getMessage(), "File Not Found");
         }
     }
 

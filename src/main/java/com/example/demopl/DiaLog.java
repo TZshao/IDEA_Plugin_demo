@@ -1,9 +1,11 @@
 package com.example.demopl;
 
 import com.intellij.ide.util.PropertiesComponent;
+import kotlinx.html.I;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * @author shaoyh
@@ -29,7 +31,8 @@ public class DiaLog {
     }
 
     public DiaLog() {
-
+        lineNum.setText(PropertiesComponent.getInstance().getValue("reader_onceLineNum"));
+        chapterRge.setText(PropertiesComponent.getInstance().getValue("reader_chapterRge"));
         //跳转
         buttonJumpTo.addActionListener(e -> {
             String input = jumpTo.getText();
@@ -48,8 +51,6 @@ public class DiaLog {
                 Util.locateLinePre(FileSelector.getFile(), Integer.parseInt(input));
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(panel, "请输入有效的数字！", "错误", JOptionPane.ERROR_MESSAGE);
-            }catch (IOException ex) {
-                JOptionPane.showMessageDialog(panel, "超出文本范围！", "错误", JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -57,14 +58,24 @@ public class DiaLog {
         buttonLineNum.addActionListener(e -> {
             String onceLineNum = lineNum.getText();
             if (Util.isPNumber(onceLineNum)) {
-                Config.onceLineNum = Integer.parseInt(onceLineNum);
+                PropertiesComponent.getInstance().setValue("reader_onceLineNum", Integer.parseInt(onceLineNum), 3);
             }
         });
 
         //章节分析
         buttonChapter.addActionListener(e -> {
-
+            String rgeText = chapterRge.getText();
+            if (Util.isEmpty(rgeText)) return;
+            PropertiesComponent.getInstance().setValue("reader_chapterRge", rgeText);
+            Map<String, Integer> map = ChapterExtractor.extractChapters(rgeText);
+            if (map.isEmpty()) {
+                JOptionPane.showMessageDialog(panel, "未识别到有效章节！", "错误", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            Config.chapters = map;
+            JOptionPane.showMessageDialog(panel, "别到章节，共："+map.size(), "完成", JOptionPane.INFORMATION_MESSAGE);
         });
+
     }
 
 

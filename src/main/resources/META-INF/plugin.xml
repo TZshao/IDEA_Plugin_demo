@@ -32,8 +32,9 @@
             <!-- 将一级菜单添加到 Tools 菜单 -->
             <add-to-group group-id="ToolsMenu" anchor="first"/>
             <!-- 定义二级菜单 -->
-            <action id="Choose" text="Choose" class="com.example.demopl.FileSelector"/>
-            <action id="input" text="Input" class="com.example.demopl.ShowDialog"/>
+            <action id="Choose" text="选择文件" class="com.example.demopl.FileSelector"/>
+            <action id="input" text="设置" class="com.example.demopl.ShowDialog"/>
+            <action id="popup" text="章节跳转" class="com.example.demopl.ChapterJumps"/>
 <!--            <group id="SubMenuGroup" text="Sub Menu" popup="true">-->
                 <!-- 定义二级菜单的操作 -->
 <!--            </group>-->

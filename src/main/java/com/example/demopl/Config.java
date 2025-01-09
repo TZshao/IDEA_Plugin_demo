@@ -1,5 +1,7 @@
 package com.example.demopl;
 
+import java.util.Map;
+
 /**
  * @author shaoyh
  * @version V1.0
@@ -8,7 +10,7 @@ package com.example.demopl;
  */
 public class Config {
     public static long currentPos = -1;
-    public static int onceLineNum = -1;
     public static boolean open = true;
+    public static Map<String, Integer> chapters;
 
 }

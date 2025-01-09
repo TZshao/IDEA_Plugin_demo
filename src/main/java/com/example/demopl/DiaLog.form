@@ -24,7 +24,7 @@
       <component id="d0b2b" class="javax.swing.JTextField" binding="lineNum">
         <constraints>
           <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
+            <preferred-size width="328" height="34"/>
           </grid>
         </constraints>
         <properties>
@@ -50,7 +50,7 @@
       <component id="bb9c7" class="javax.swing.JTextField" binding="jumpTo">
         <constraints>
           <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
+            <preferred-size width="328" height="34"/>
           </grid>
         </constraints>
         <properties/>
@@ -66,7 +66,7 @@
       <component id="19eb7" class="javax.swing.JTextField" binding="chapterRge">
         <constraints>
           <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
+            <preferred-size width="328" height="34"/>
           </grid>
         </constraints>
         <properties>

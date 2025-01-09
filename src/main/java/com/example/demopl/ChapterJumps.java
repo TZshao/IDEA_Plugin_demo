@@ -7,18 +7,16 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.ui.awt.RelativePoint;
+import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 
 public class ChapterJumps extends AnAction {
 
-    public int chapterNum;
-
     @Override
-    public void actionPerformed(AnActionEvent e) {
+    public void actionPerformed(@NotNull AnActionEvent e) {
         // 动态生成选项列表
         List<chapter> options = generateDynamicOptions();
         if (options.isEmpty()) {
@@ -38,7 +36,9 @@ public class ChapterJumps extends AnAction {
                 .setTitle("选择章节")
                 .setItemChosenCallback(chapter -> {
                     System.out.println("select "+chapter);
-                    Util.locateLinePre(FileSelector.file, chapter.chapterNum);
+                    PropertiesComponent.getInstance().setValue("reader_currentLine", chapter.chapterNum-1, 1);
+                    Config.currentLine = chapter.chapterNum-1;
+                    Core.locateLine(FileSelector.fileReader);
                 })
                 .createPopup()
                 .show(new RelativePoint(centerPoint));
@@ -51,7 +51,7 @@ public class ChapterJumps extends AnAction {
         if (chapters==null || chapters.isEmpty()) {
             chapters=new HashMap<>();
             String rge = PropertiesComponent.getInstance().getValue("reader_chapterRge");
-            if (!Util.isEmpty(rge)) {
+            if (!Core.isEmpty(rge)) {
                 chapters = ChapterExtractor.extractChapters(rge);
             }
         }

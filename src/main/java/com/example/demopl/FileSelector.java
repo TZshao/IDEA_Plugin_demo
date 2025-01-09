@@ -9,13 +9,12 @@ import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
 
-import java.io.FileNotFoundException;
-import java.io.RandomAccessFile;
+import java.io.*;
 
 public class FileSelector extends AnAction {
 
     public static String selectedFilePath;
-    public static RandomAccessFile file;
+    public static BufferedReader fileReader;
 
     @Override
     public void actionPerformed(AnActionEvent e) {
@@ -24,35 +23,36 @@ public class FileSelector extends AnAction {
         fileChooserDescriptor.withFileFilter(file -> file.getName().endsWith(".txt"));
         VirtualFile vFile = FileChooser.chooseFile(fileChooserDescriptor, e.getProject(), null);
         if (vFile == null) return;
-        try {
-            selectedFilePath = vFile.getPath();
-            PropertiesComponent properties = PropertiesComponent.getInstance();
-            properties.setValue("reader_selectedFilePath", selectedFilePath);
-            file = new RandomAccessFile(selectedFilePath, "r");
-            Messages.showInfoMessage("File selected: " + selectedFilePath, "Selection Complete");
-        } catch (FileNotFoundException ex) {
-            Messages.showErrorDialog(ex.getMessage(), "File Not Found");
-        }
+        selectedFilePath = vFile.getPath();
+        PropertiesComponent properties = PropertiesComponent.getInstance();
+        properties.setValue("reader_selectedFilePath", selectedFilePath);
+        initFile(selectedFilePath);
+
+        Messages.showInfoMessage("File selected: " + selectedFilePath, "Selection Complete");
+        properties.setValue("reader_currentLine", 1, 1);
+        Config.currentLine = 1;
     }
 
-    public static RandomAccessFile getFile() {
-        if (file == null) {
+    public static BufferedReader getFileReader() {
+        if (fileReader == null) {
             PropertiesComponent instance = PropertiesComponent.getInstance();
             if (instance.getValue("reader_selectedFilePath") != null) {
                 initFile(instance.getValue("reader_selectedFilePath"));
             }
         }
-        return file;
+        return fileReader;
     }
 
-    public static boolean initFile(String filePath) {
+    private static void initFile(String filePath) {
         try {
-            file = new RandomAccessFile(filePath, "r");
-            selectedFilePath = filePath;
-            return true;
-        } catch (Throwable e) {
-            return false;
+            fileReader = new BufferedReader(new FileReader(filePath));
+            fileReader.mark(10000000);
+        } catch (FileNotFoundException e) {
+            Messages.showInfoMessage("File no found", "ERROR");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+        selectedFilePath = filePath;
     }
 
 }

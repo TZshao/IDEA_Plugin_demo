@@ -12,7 +12,7 @@ public class ChapterExtractor {
     public static Map<String, Integer> extractChapters(String regex) {
         Map<String, Integer> result = new LinkedHashMap<>(); // 行号 -> 匹配文本
 
-        RandomAccessFile file = FileSelector.getFile();
+        BufferedReader file = FileSelector.getFileReader();
         if (file == null) Messages.showInfoMessage("File 先选择文件", "ERROR");
 
         String filePath = PropertiesComponent.getInstance().getValue("reader_selectedFilePath");

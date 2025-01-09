@@ -1,5 +1,6 @@
-package com.example.demopl;
+package com.example.demopl.action;
 
+import com.example.demopl.core.Core;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.editor.Editor;

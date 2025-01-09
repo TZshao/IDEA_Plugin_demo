@@ -13,9 +13,18 @@
     <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
-    <description>
-        在注释文档中阅读：
-        在注释文中添加标记 @author docReader 与 ---
+    <description >
+        <![CDATA[
+&#10;
+        在注释文档中添加标记 @DocReader 与 @--- ,按下快捷键即可阅读(注意大写)
+&#10;
+        Shitf + X 下一行
+        Shitf + Z 上一行
+        Shitf + C 规避键
+&#10;
+        菜单：Tolls-》 DocReader
+        目前支持：自定义显示行数；章节正则解析；按章节跳转；按行跳转
+        ]]>
     </description>
 
     <!-- Product and plugin compatibility requirements.
@@ -32,26 +41,31 @@
         <group id="MyToolsGroup" text="DocReader" popup="true">
             <!-- 将一级菜单添加到 Tools 菜单 -->
             <add-to-group group-id="ToolsMenu" anchor="first"/>
-            <!-- 定义二级菜单 -->
-            <action id="Choose" text="选择文件" class="com.example.demopl.FileSelector"/>
-            <action id="input" text="设置" class="com.example.demopl.ShowDialog"/>
-            <action id="popup" text="章节跳转" class="com.example.demopl.ChapterJumps"/>
-            <action id="enable" text="启用" class="com.example.demopl.EnableAction"/>
+            <action id="Choose" text="选择文件" class="com.example.demopl.action.FileSelector"/>
+            <action id="input" text="按行跳转" class="com.example.demopl.action.JumpToLine"/>
+            <action id="popup" text="章节跳转" class="com.example.demopl.action.ChapterJumps"/>
+            <group id="SettingsGroup" text="设置">
+                <action id="chapterExtractor" text="单页显示行数" class="com.example.demopl.action.ChangeLineNum"/>
+                <action id="changeLineNum" text="章节解析正则" class="com.example.demopl.action.ChapterExtractor"/>
+                <action id="enable" text="启用中" class="com.example.demopl.action.EnableAction"/>
+            </group>
 
         </group>
 
         <!-- 快捷键 -->
-        <action id="KeyPreRead" class="com.example.demopl.KeyPreRead" text="下一行" description="KeyPreRead">
-            <keyboard-shortcut keymap="$default" first-keystroke="shift Z"/>
-        </action>
-        <action id="KeyNextRead" class="com.example.demopl.KeyNextRead" text="上一行" description="KeyNextRead">
+        <action id="KeyPreRead" class="com.example.demopl.action.KeyNextRead" text="下一行" description="KeyNextRead">
             <keyboard-shortcut keymap="$default" first-keystroke="shift X"/>
         </action>
-        <action id="clear" class="com.example.demopl.ClearAct" text="Boss键" description="KeyNextRead">
+        <action id="KeyNextRead" class="com.example.demopl.action.KeyPreRead" text="上一行" description="KeyPreRead">
+            <keyboard-shortcut keymap="$default" first-keystroke="shift Z"/>
+        </action>
+        <action id="clear" class="com.example.demopl.action.ClearAct" text="Boss键" description="KeyNextRead">
             <keyboard-shortcut keymap="$default" first-keystroke="shift C"/>
         </action>
+        <action id="enableKey" class="com.example.demopl.action.EnableAction" text="启停功能" description="KeyNextRead">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt d"/>
+        </action>
     </actions>
-
 
 
 </idea-plugin>

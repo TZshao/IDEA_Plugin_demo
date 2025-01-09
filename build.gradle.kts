@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "com.example"
-version = "1.0-SNAPSHOT"
+version = "0.1-Bate"
 
 repositories {
     mavenCentral()
@@ -29,6 +29,10 @@ tasks {
     withType<JavaCompile> {
         sourceCompatibility = "17"
         targetCompatibility = "17"
+        options.encoding = "UTF-8"
+    }
+    withType<JavaExec> {
+        jvmArgs = listOf("-Dfile.encoding=UTF-8", "-Dsun.stdout.encoding=UTF-8", "-Dsun.stderr.encoding=UTF-8")
     }
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions.jvmTarget = "17"

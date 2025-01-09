@@ -1,5 +1,8 @@
-package com.example.demopl;
+package com.example.demopl.action;
 
+import com.example.demopl.core.Config;
+import com.example.demopl.core.Core;
+import com.example.demopl.util.Util;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -51,7 +54,7 @@ public class ChapterJumps extends AnAction {
         if (chapters==null || chapters.isEmpty()) {
             chapters=new HashMap<>();
             String rge = PropertiesComponent.getInstance().getValue("reader_chapterRge");
-            if (!Core.isEmpty(rge)) {
+            if (!Util.isEmpty(rge)) {
                 chapters = ChapterExtractor.extractChapters(rge);
             }
         }

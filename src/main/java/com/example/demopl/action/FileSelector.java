@@ -1,6 +1,9 @@
-package com.example.demopl;
+package com.example.demopl.action;
 
+import com.example.demopl.core.Config;
+import com.example.demopl.util.Util;
 import com.intellij.ide.util.PropertiesComponent;
+import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.fileChooser.FileChooser;
@@ -27,8 +30,7 @@ public class FileSelector extends AnAction {
         PropertiesComponent properties = PropertiesComponent.getInstance();
         properties.setValue("reader_selectedFilePath", selectedFilePath);
         initFile(selectedFilePath);
-
-        Messages.showInfoMessage("File selected: " + selectedFilePath, "Selection Complete");
+        Util.showNotify(e.getProject(),"已选择文件",selectedFilePath, NotificationType.INFORMATION);
         properties.setValue("reader_currentLine", 1, 1);
         Config.currentLine = 1;
     }

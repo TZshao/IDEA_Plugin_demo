@@ -1,5 +1,8 @@
-package com.example.demopl;
+package com.example.demopl.action;
 
+import com.example.demopl.core.Config;
+import com.example.demopl.util.Util;
+import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -12,24 +15,16 @@ public class EnableAction extends AnAction {
     public void actionPerformed(@NotNull AnActionEvent e) {
         // 切换状态
         Config.open = !Config.open;
-
-        // 更新按钮文本
-        Presentation presentation = e.getPresentation();
-        presentation.setText(Config.open ? "启用" : "停用");
-
-        // 处理启用/停用逻辑
-        if (Config.open) {
-            System.out.println("功能已启用");
-        } else {
-            System.out.println("功能已停用");
-        }
+        Util.showNotify(e.getProject(),"状态切换",
+                Config.open ? "快捷键占用已开启":"快捷键占用已关闭", NotificationType.INFORMATION);
     }
 
     @Override
     public void update(@NotNull AnActionEvent e) {
         // 动态更新菜单项显示状态
         Presentation presentation = e.getPresentation();
-        presentation.setText(Config.open ? "停用" : "启用");
+        presentation.setText(Config.open ? "启用中" : "停用中");
+
     }
     @Override
     public @NotNull ActionUpdateThread getActionUpdateThread() {

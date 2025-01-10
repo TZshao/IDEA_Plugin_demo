@@ -1,5 +1,6 @@
-package com.example.demopl.action;
+package com.example.demopl.action.input;
 
+import com.example.demopl.action.FileSelector;
 import com.example.demopl.core.Config;
 import com.example.demopl.core.Core;
 import com.example.demopl.util.Util;

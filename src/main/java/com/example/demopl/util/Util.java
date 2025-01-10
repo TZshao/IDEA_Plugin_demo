@@ -15,6 +15,10 @@ public class Util {
     }
     //正整数
     public static boolean isPNumber(String string) {
+        if (string == null || string.trim().isEmpty()) {
+            return false;
+        }
+        string = string.trim();
         try {
             int i = Integer.parseInt(string);
             return i > 0;
@@ -23,6 +27,6 @@ public class Util {
         }
     }
     public static boolean isEmpty(String string) {
-        return string == null || string.isEmpty();
+        return string == null || string.trim().isEmpty();
     }
 }

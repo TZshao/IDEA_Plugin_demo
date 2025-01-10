@@ -5,6 +5,7 @@ import com.example.demopl.core.Core;
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.editor.Editor;
 import org.jetbrains.annotations.NotNull;
 
 public class KeyNextRead extends AnAction {
@@ -12,7 +13,8 @@ public class KeyNextRead extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
         if (Config.open) {
-            Core.moveLine(e, true);
+            Editor editor = e.getData(com.intellij.openapi.actionSystem.CommonDataKeys.EDITOR);
+            Core.moveLine(editor, true);
         }
     }
 
@@ -24,7 +26,7 @@ public class KeyNextRead extends AnAction {
 
     @Override
     public @NotNull ActionUpdateThread getActionUpdateThread() {
-        return ActionUpdateThread.EDT; // 指定在事件分发线程运行
+        return ActionUpdateThread.BGT; // 指定在事件分发线程运行
     }
 
 }

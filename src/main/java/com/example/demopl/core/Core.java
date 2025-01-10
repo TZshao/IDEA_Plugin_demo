@@ -20,7 +20,9 @@ import java.util.regex.Pattern;
  */
 public class Core {
 
-
+    /**
+     * 替换Mark区内容
+     */
     public static boolean replace(Editor editor, Project project, String content, boolean isCheck) {
         Document document = editor.getDocument();
         CharSequence text = document.getCharsSequence();
@@ -40,7 +42,7 @@ public class Core {
                         document.replaceString(replaceStart, replaceEnd, "\n" + content));
             }
         } else {
-            Util.showNotify(project, "找不到标记", "可以停用功能(ctrl alt d)\n或者先设置标记:\n @DocReader 与 @--- ", NotificationType.INFORMATION);
+            Util.showNotify(project, "找不到标记", "阅读标记:\n @DocReader 与 @--- ", NotificationType.INFORMATION);
             return false;
         }
         return true;
@@ -64,19 +66,21 @@ public class Core {
             Messages.showMessageDialog("IO异常!", "Error", Messages.getErrorIcon());
         }
     }
-
-    public static void moveLine(AnActionEvent e, boolean positive) {
-        Editor editor = e.getData(com.intellij.openapi.actionSystem.CommonDataKeys.EDITOR);
+    //翻页行为
+    public static void moveLine(Editor editor, boolean positive) {
         if (editor == null) {
             Messages.showErrorDialog("Error 找不到编辑区", "Error");
             return;
         }
+        Project project=editor.getProject();
         BufferedReader file = FileSelector.getFileReader();
         PropertiesComponent instance = PropertiesComponent.getInstance();
         if (file == null) {
-            Util.showNotify(e.getProject(), "未设置文件", "请先选择文件\n或者停用功能(ctrl alt d)", NotificationType.WARNING);
+            Util.showNotify(project, "未设置文件", "请先选择文件\n或者停用功能(ctrl alt d)", NotificationType.WARNING);
+            return;
         }
-        if (!Core.replace(editor, e.getProject(), null, true)) {
+        if (!Core.replace(editor, project, null, true)) {
+            Util.showNotify(project, "找不到标记", "可以停用功能(ctrl alt d)\n或者先设置标记:\n @DocReader 与 @--- ", NotificationType.INFORMATION);
             return;
         }
 
@@ -101,9 +105,20 @@ public class Core {
                 String lineText = FileSelector.fileReader.readLine();
                 text.append(lineText).append("\n");
             }
-            Core.replace(editor, e.getProject(), text.toString(), false);
+            Core.replace(editor,project, text.toString(), false);
         } catch (IOException ex) {
             Messages.showErrorDialog("无法读取文件 " + ex.getMessage(), "Error");
+        }
+    }
+    //BOSS键
+    public static void clear(Editor editor) {
+        String content = """
+                \t *Returns the presentation which represents the action in the place from where it is invoked
+                \t *此功能尚未启用
+                \t *@return Object
+                """;
+        if (editor != null) {
+            Core.replace(editor, editor.getProject(), content, false);
         }
     }
 

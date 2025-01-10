@@ -1,5 +1,6 @@
-package com.example.demopl.action;
+package com.example.demopl.action.input;
 
+import com.example.demopl.action.FileSelector;
 import com.example.demopl.core.Config;
 import com.example.demopl.util.Util;
 import com.intellij.ide.util.PropertiesComponent;
@@ -17,12 +18,19 @@ public class ChapterExtractor extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
         PropertiesComponent properties = PropertiesComponent.getInstance();
-        String rgeText = JOptionPane.showInputDialog("使用正则解析章节:",properties.getValue("reader_chapterRge"));
+        String rgeText = Messages.showInputDialog(
+                "Input 使用正则解析章节:",   // 消息内容
+                "正则解析",       // 标题
+                Messages.getQuestionIcon(), // 图标
+                properties.getValue("reader_chapterRge"),
+                null
+        );
+
         if (Util.isEmpty(rgeText)) return;
         properties.setValue("reader_chapterRge", rgeText);
         Map<String, Integer> map = extractChapters(rgeText);
         if (map.isEmpty()) {
-            Messages.showInfoMessage("Fail 未识别到有效章节", "失败");
+            Messages.showInfoMessage("未识别到有效章节"+" ", "失败");
             return;
         }
         Config.chapters = map;

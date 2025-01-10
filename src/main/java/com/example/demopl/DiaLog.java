@@ -1,6 +1,6 @@
 //package com.example.demopl;
 //
-//import com.example.demopl.action.ChapterExtractor;
+//import com.example.demopl.action.input.ChapterExtractor;
 //import com.example.demopl.action.FileSelector;
 //import com.intellij.ide.util.PropertiesComponent;
 //

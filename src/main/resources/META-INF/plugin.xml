@@ -15,15 +15,15 @@
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description >
         <![CDATA[
-&#10;
-        在注释文档中添加标记 @DocReader 与 @--- ,按下快捷键即可阅读(注意大写)
-&#10;
-        Shitf + X 下一行
-        Shitf + Z 上一行
-        Shitf + C 规避键
-&#10;
-        菜单：Tolls-》 DocReader
-        目前支持：自定义显示行数；章节正则解析；按章节跳转；按行跳转
+        在注释文档中添加标记 @DocReader 与 @--- &#10;
+        光标置于标记之间滑动滚轮阅读 &#10;
+        快捷键 上一行 下一行 清除 &#10;
+        Shitf + X Z C &#10;&#10;
+
+        菜单：Tolls-》 DocReader &#10;
+        目前支持：自定义显示行数；章节正则解析；按章节跳转；按行跳转 &#10;
+
+        提示：当一行文本过多时，在行标处开启软换行 &#10;
         ]]>
     </description>
 
@@ -35,6 +35,7 @@
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
         <notificationGroup id="DocReader_Notifications" displayType="BALLOON" isLogByDefault="false"/>
+        <editorFactoryListener implementation="com.example.demopl.core.MouseWheelPlugin"/>
     </extensions>
     <actions>
         <!-- 定义一级菜单 -->
@@ -42,11 +43,11 @@
             <!-- 将一级菜单添加到 Tools 菜单 -->
             <add-to-group group-id="ToolsMenu" anchor="first"/>
             <action id="Choose" text="选择文件" class="com.example.demopl.action.FileSelector"/>
-            <action id="input" text="按行跳转" class="com.example.demopl.action.JumpToLine"/>
-            <action id="popup" text="章节跳转" class="com.example.demopl.action.ChapterJumps"/>
+            <action id="input" text="按行跳转" class="com.example.demopl.action.input.JumpToLine"/>
+            <action id="popup" text="章节跳转" class="com.example.demopl.action.input.ChapterJumps"/>
             <group id="SettingsGroup" text="设置">
-                <action id="chapterExtractor" text="单页显示行数" class="com.example.demopl.action.ChangeLineNum"/>
-                <action id="changeLineNum" text="章节解析正则" class="com.example.demopl.action.ChapterExtractor"/>
+                <action id="chapterExtractor" text="单页显示行数" class="com.example.demopl.action.input.ChangeLineNum"/>
+                <action id="changeLineNum" text="章节解析正则" class="com.example.demopl.action.input.ChapterExtractor"/>
                 <action id="enable" text="启用中" class="com.example.demopl.action.EnableAction"/>
             </group>
 

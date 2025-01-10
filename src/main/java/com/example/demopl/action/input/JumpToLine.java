@@ -1,26 +1,32 @@
-package com.example.demopl.action;
+package com.example.demopl.action.input;
 
+import com.example.demopl.action.FileSelector;
 import com.example.demopl.core.Config;
 import com.example.demopl.core.Core;
 import com.example.demopl.util.Util;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.ui.Messages;
 import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
 
 public class JumpToLine extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        String input = JOptionPane.showInputDialog("请输入目标行:");
-
-        if (input.isEmpty() || !Util.isPNumber(input)) {
+        String input = Messages.showInputDialog(
+                "Jump to:",   // 消息内容
+                "输入目标行",       // 标题
+                Messages.getQuestionIcon() // 图标
+        );
+        if (Util.isPNumber(input)) {
             return;
         }
 
         try {
             int line = Integer.parseInt(input);
+            if (line < 0) {
+                return;
+            }
             System.out.println("jump to ::" + line);
             // 在这里添加跳转逻辑，比如定位到指定代码行
             if (null == FileSelector.getFileReader()) {
